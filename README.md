@@ -20,4 +20,4 @@ python setup.py build
 
 ## Key Controls
 
-Configure the brightness-up command and brightness-down command with a combination of key commands.  The listed keys in the JSON array must be simultanerously pressed for the action to take place.
+Configure the brightness-up command and brightness-down command with a combination of key commands in **resources/keymap.json**.  The listed keys in the JSON array must be simultanerously pressed for the action to take place.
