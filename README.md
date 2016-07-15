@@ -14,8 +14,9 @@ Install by running the INSTALL.sh to add as a startup program
 
 or to build the binary
 
-  python setup.py build
-
+'''
+python setup.py build
+'''
 
 ## Key Controls
 
