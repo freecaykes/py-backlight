@@ -3,11 +3,6 @@ import termios
 import contextlib
 import subprocess
 
-import gi
-gi.require_version('Gtk', '3.0')
-
-from gi.repository import Gtk
-
 class BrightnessControl:
     def __init__(self):
         # get active monitor and current brightness
@@ -41,4 +36,5 @@ class BrightnessControl:
         self.currB = max(0, min(100, self.currB + delta))
         newBrightness = float(self.currB)/100
         cmd = "xrandr --output %s --brightness %.2f" % (self.monitor, newBrightness)
+        # print cmd
         cmdStatus = subprocess.check_output(cmd, shell=True)

@@ -29,21 +29,21 @@ def printError():
 #key events
 def keyEvent_down(event):
     global sequence_held
-    # print "EVENT  DOWN Key", event.Key
     sequence_held.append(event.Key)
+    # print sequence_held
 
     iter = 0
     for control in key_controls:
         execute = all(key in sequence_held for key in control)
         if execute:
             brcontrol.scale_moved((-DELTA)**(iter))
-            return
+            iter = 0
         else:
             iter += 1
 
 def keyEvent_up(event):
     global sequence_held
-    sequence_held = []
+    sequence_held.remove(event.Key)
 
 @contextlib.contextmanager
 def raw_hex(file):
