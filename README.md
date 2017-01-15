@@ -1,4 +1,4 @@
-# xBackLight
+# py-backlight
 
 xBackLight gives access to Linux OS brightness control using xrandr program mapped to key presses
 
