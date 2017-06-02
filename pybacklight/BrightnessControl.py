@@ -1,16 +1,19 @@
+#!/usr/bin/env python
+
 import sys
 import termios
 import contextlib
 import subprocess
+from sets import Set
 
 class BrightnessControl:
     def __init__(self):
         # get active monitor and current brightness
-        self.monitor = self.getActiveMonitor()
+        self.active_monitors = self.getActiveMonitor()
         self.currB = self.getCurrentBrightness()
 
     def initStatus(self):
-        if(self.monitor == "" or self.currB == ""):
+        if(self.active_monitors == [] or self.currB == ""):
             return False
         return True
 
@@ -18,7 +21,8 @@ class BrightnessControl:
         #Find display monitor
         monitor = subprocess.check_output("xrandr -q | grep ' connected' | cut -d ' ' -f1", shell=True)
         if(monitor != ""):
-            monitor = monitor.split('\n')[0]
+            monitor = monitor.split('\n')
+
         return monitor
 
     def getCurrentBrightness(self):
@@ -29,12 +33,21 @@ class BrightnessControl:
             currB = int(float(currB) * 100)
         else:
             currB = ""
+            
         return currB
 
     def scale_moved(self, delta):
         #Change brightness
         self.currB = max(0, min(100, self.currB + delta))
         newBrightness = float(self.currB)/100
-        cmd = "xrandr --output %s --brightness %.2f" % (self.monitor, newBrightness)
-        # print cmd
-        cmdStatus = subprocess.check_output(cmd, shell=True)
+
+        cmd = ""
+        for m in self.active_monitors:
+            try:
+                cmd = "xrandr --output %s --brightness %.2f" % (m, newBrightness)
+                print cmd
+                cmdStatus = subprocess.check_output(cmd, shell=True)
+            except subprocess.CalledProcessError as e:
+                # remove from active_monitors
+                monitor_index = self.active_monitors.index( m )
+                del self.active_monitors[ monitor_index ]
